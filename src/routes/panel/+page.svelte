@@ -1,30 +1,48 @@
 <script lang="ts">
 	import { listen } from '@tauri-apps/api/event'
-	import { onMount } from 'svelte'
-	import { center } from 'styled-system/patterns'
+	import { onMount, onDestroy } from 'svelte'
+	import { panelStyles } from '../../components/styles'
+	import { fly } from 'svelte/transition'
+	import type { Tip } from '../../components/tipController'
 
-	type TipEventPayload = {
-		title: string
-		description: string
-	}
-
+	let showTip = false
+	let hideTimeout: ReturnType<typeof setTimeout> | null = null
 	let displayedTipTitle = ''
 	let displayedTipDescription = ''
+	let autoHide = true
+	let displayDuration = 5000
+
+	const setTip = (tip: Tip) => {
+		displayedTipTitle = tip.title
+		displayedTipDescription = tip.description
+		displayDuration = tip.displayDuration
+		autoHide = tip.autoHide
+		showTip = !showTip
+		if (autoHide) manageAutoHide()
+	}
+
+	const manageAutoHide = () => {
+		if (hideTimeout) clearTimeout(hideTimeout)
+		if (autoHide) {
+			hideTimeout = setTimeout(() => (showTip = false), displayDuration)
+		}
+	}
 
 	onMount(() => {
-		listen<TipEventPayload>('displayTip', (event) => {
-			displayedTipTitle = event.payload.title
-			displayedTipDescription = event.payload.description
+		listen<Tip>('displayTip', (event) => {
+			setTip(event.payload)
 		})
 	})
 
-	let panelStyles = {
-		container: center()
-	}
+	onDestroy(() => hideTimeout && clearTimeout(hideTimeout))
 </script>
 
-<div data-tauri-drag-region="default" class={panelStyles.container}>
-	<h1>Welcome to the Tip Panel</h1>
-	<p>Displayed Tip Title: {displayedTipTitle}</p>
-	<p>Displayed Tip Description: {displayedTipDescription}</p>
+<div class={panelStyles.container}>
+	<div data-tauri-drag-region class={panelStyles.dragRegion}></div>
+	{#if showTip}
+		<div in:fly={{ x: 100, duration: 300 }} out:fly={{ x: 100, duration: 300 }}>
+			<h2 class={panelStyles.title}>{displayedTipTitle}</h2>
+			<p class={panelStyles.description}>{displayedTipDescription}</p>
+		</div>
+	{/if}
 </div>

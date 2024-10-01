@@ -20,3 +20,10 @@ tauri-plugin-shell = "2.0.0-rc"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
+[profile.release]
+strip = true
+incremental = false
+codegen-units = 1
+panic = "abort"
+opt-level = "s"
+lto = true

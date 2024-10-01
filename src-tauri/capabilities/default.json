@@ -5,9 +5,6 @@
   "windows": ["console", "panel"],
   "permissions": [
     "core:default",
-    "shell:allow-open",
-    "core:event:allow-listen",
-    "core:event:allow-emit",
     "core:window:allow-start-dragging"
   ]
 }

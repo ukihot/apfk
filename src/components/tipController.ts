@@ -1,23 +1,29 @@
 export type Tip = {
-	id: string
+	id?: string
 	title: string
 	description: string
+	autoHide: boolean
+	displayDuration: number
 }
 
 const storageKey = 'tips'
 
-// データを保存（更新または新規登録）
+// データを保存
 export const saveTip = (tip: Tip): void => {
 	const tips = getAllTips()
-	const existingIndex = tips.findIndex((existingTip) => existingTip.id === tip.id)
 
-	// 更新または追加
-	const updatedTips =
-		existingIndex !== -1
-			? tips.map((existingTip, index) => (index === existingIndex ? tip : existingTip))
-			: [...tips, tip]
-
-	localStorage.setItem(storageKey, JSON.stringify(updatedTips))
+	if (tip.id) {
+		const existingIndex = tips.findIndex((existingTip) => existingTip.id === tip.id)
+		const updatedTips =
+			existingIndex !== -1
+				? tips.map((existingTip, index) => (index === existingIndex ? tip : existingTip))
+				: [...tips, tip]
+		localStorage.setItem(storageKey, JSON.stringify(updatedTips))
+	} else {
+		tip.id = Date.now().toString()
+		const updatedTips = [...tips, tip]
+		localStorage.setItem(storageKey, JSON.stringify(updatedTips))
+	}
 }
 
 // データを削除
@@ -35,4 +41,9 @@ export const getTip = (id: string): Tip | null => {
 export const getAllTips = (): Tip[] => {
 	const tips = localStorage.getItem(storageKey)
 	return tips ? JSON.parse(tips) : []
+}
+
+// 全てのデータを削除
+export const pruneTips = (): void => {
+	localStorage.removeItem(storageKey)
 }

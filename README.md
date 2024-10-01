@@ -1,7 +1,19 @@
-# Tauri + SvelteKit + TypeScript
+# Tauri + SvelteKit + PandaCSS Multi-Window Application
 
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
+This project is a multi-window desktop application built using Tauri v2, SvelteKit, and PandaCSS. The main features include the creation, display, and deletion of tips.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+- **Multi-Window Interface**: An interface that supports multiple windows.
+- **Tip Management**: Functionality to add, display, and delete tips.
+- **Stylish UI**: Utilizes PandaCSS for a refined design.
+
+## Setup Instructions
+
+To set up this project locally, please follow the instructions below.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 14 or higher)
+- [Rust](https://www.rust-lang.org/) (required for building Tauri applications)
+- [Tauri CLI](https://tauri.studio/docs/getting-started/installation) (necessary for using Tauri)
